@@ -10,7 +10,7 @@ import {
 } from '../../_src/farcaster.js';
 import {
   DEFAULT_HUB,
-  getImageFromCast,
+  parseEmbeds,
   profileName,
   warpcastConvoUrl,
   warpcastProfileUrl,
@@ -57,7 +57,7 @@ export default async function handleUser(req: VercelRequest, res: VercelResponse
       title: generateCastText(cast.data.castAddBody),
       link: warpcastConvoUrl(cast.hash),
       date: new Date(fromFarcasterTime(cast.data.timestamp)),
-      image: getImageFromCast(cast.data.castAddBody),
+      content: parseEmbeds(cast.data.castAddBody),
       author: [
         {
           name: profileName(profile),
