@@ -1,11 +1,11 @@
 {
 	"name": "farcaster-hub-feeds",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"private": true,
 	"type": "module",
 	"scripts": {
 		"dev": "wrangler dev",
-		"deploy": "wrangler deploy",
+		"deploy": "wrangler deploy --minify",
 		"preview": "wrangler dev"
 	},
 	"devDependencies": {
