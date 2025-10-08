@@ -18,6 +18,7 @@ const schema = z.object({
   url: z.string(),
   feedType: z.enum(['rss', 'json', 'atom']),
   hub: z.string().url().default(DEFAULT_HUB),
+  limit: z.coerce.number().default(1000),
 });
 
 // TODO: Enhance parent_url data to include name, icon, etc if possible
@@ -26,9 +27,9 @@ export default async function handleUser(req: VercelRequest, res: VercelResponse
   const safeParse = schema.safeParse(req.query);
   if (!safeParse.success) return res.status(400).json(safeParse.error);
 
-  const { feedType, url, hub: _hub } = safeParse.data;
+  const { feedType, url, hub: _hub, limit } = safeParse.data;
   const hub = _hub.replace(/\/$/, ''); // remove trailing slash
-  const castsByParent = await getCastsByParent(hub, url);
+  const castsByParent = await getCastsByParent(hub, url, limit);
 
   if (castsByParent.error) return res.status(500).json(castsByParent);
   const casts = castsByParent?.data?.messages;

@@ -21,16 +21,17 @@ const schema = z.object({
   parent_url: z.string().optional(),
   feedType: z.enum(['rss', 'json', 'atom']),
   hub: z.string().url().default(DEFAULT_HUB),
+  limit: z.coerce.number().default(1000),
 });
 
 export default async function handleUser(req: VercelRequest, res: VercelResponse) {
   const safeParse = schema.safeParse(req.query);
   if (!safeParse.success) return res.status(400).json(safeParse.error);
 
-  const { feedType, parent_url: parentUrl, fid, hub: _hub } = safeParse.data;
+  const { feedType, parent_url: parentUrl, fid, hub: _hub, limit } = safeParse.data;
   const hub = _hub.replace(/\/$/, ''); // remove trailing slash
   const profile = await fidToProfile(hub, fid);
-  const castsByFid = await getCastsByFid(hub, fid);
+  const castsByFid = await getCastsByFid(hub, fid, limit);
 
   if (castsByFid.error) return res.status(500).json(castsByFid);
   let casts = castsByFid?.data?.messages;

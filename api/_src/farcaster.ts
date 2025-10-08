@@ -44,8 +44,8 @@ export async function fidToProfile(hub: string, fid: number): Promise<Profile> {
   return profile;
 }
 
-export async function getCastsByFid(hub: string, fid: number) {
-  const endpoint = hub + `/v1/castsByFid?pageSize=1000&reverse=true&fid=${fid}`;
+export async function getCastsByFid(hub: string, fid: number, pageLimit: number = 1000) {
+  const endpoint = hub + `/v1/castsByFid?pageSize=${pageLimit}&reverse=true&fid=${fid}`;
   const res = await fetch(endpoint);
 
   if (!res.ok) {
@@ -57,8 +57,8 @@ export async function getCastsByFid(hub: string, fid: number) {
   return { data: castsByFid };
 }
 
-export async function getCastsByParent(hub: string, url: string) {
-  const endpoint = hub + `/v1/castsByParent?url=${url}`;
+export async function getCastsByParent(hub: string, url: string, pageLimit: number = 1000) {
+  const endpoint = hub + `/v1/castsByParent?pageSize=${pageLimit}&url=${url}`;
   const res = await fetch(endpoint);
 
   if (!res.ok) {
